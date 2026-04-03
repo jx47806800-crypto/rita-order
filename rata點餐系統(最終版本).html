@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ⭐ PWA關鍵 -->
+<meta name="theme-color" content="#ff4d4d">
+
+<title>rita-order | 點餐系統</title>
+
+<style>
+body {
+    background-image: url("https://images.unsplash.com/photo-1598373182133-52452f7691ef?q=80&w=1170&auto=format&fit=crop");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ⭐ App風格 */
+.app-mode {
+    max-width: 420px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    text-shadow: 2px 2px 5px orange;
+}
+
+form {
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+#order-result {
+    display: none;
+    background: white;
+    padding: 15px;
+    margin-top: 20px;
+    border-left: 5px solid red;
+}
+</style>
+</head>
+
+<body id="app">
+
+<h1>rita線上點餐系統</h1>
+
+<form id="orderForm" onsubmit="return displayOrder();">
+    <input type="text" id="customer-name" placeholder="姓名" required>
+    <input type="number" id="table-number" placeholder="桌號" required>
+    <input type="date" id="new-date" required>
+    <input type="email" id="email" placeholder="Email" required>
+
+    <fieldset>
+        <legend>餐點</legend>
+        <label><input type="checkbox" name="dish" value="優格吐司">優格吐司</label>
+        <label><input type="checkbox" name="dish" value="草莓吐司">草莓吐司</label>
+        <label><input type="checkbox" name="dish" value="剝皮辣椒吐司">剝皮辣椒吐司</label>
+        <label><input type="checkbox" name="dish" value="奶酥吐司">奶酥吐司</label>
+        <label><input type="checkbox" name="dish" value="巧克力吐司">巧克力吐司</label>
+    </fieldset>
+
+    <button type="submit">送出訂單</button>
+</form>
+
+<div id="order-result">
+    <div id="order-details"></div>
+</div>
+
+<script>
+function displayOrder() {
+    const name = document.getElementById("customer-name").value;
+    const table = document.getElementById("table-number").value;
+    const date = document.getElementById("new-date").value;
+    const email = document.getElementById("email").value;
+
+    const checked = document.querySelectorAll('input[name="dish"]:checked');
+    let dishes = [];
+
+    checked.forEach(cb => dishes.push(cb.value));
+
+    let result = dishes.length ? dishes.join(", ") : "未選擇任何餐點";
+
+    document.getElementById("order-details").innerHTML = `
+        <p>姓名: ${name}</p>
+        <p>桌號: ${table}</p>
+        <p>生日: ${date}</p>
+        <p>Email: ${email}</p>
+        <p>餐點: ${result}</p>
+    `;
+
+    document.getElementById("order-result").style.display = "block";
+    document.getElementById("orderForm").reset();
+
+    return false;
+}
+
+//////////////////////////
+// ⭐ 判斷裝置（關鍵）
+//////////////////////////
+function isMobile() {
+    return /Android|iPhone|iPad/i.test(navigator.userAgent);
+}
+
+if (isMobile()) {
+    document.body.classList.add("app-mode");
+}
+</script>
+
+</body>
+</html>
